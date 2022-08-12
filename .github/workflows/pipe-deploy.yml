@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'temurim'
+        distribution: 'temurin'
         cache: maven
     - name: Compilacao
       run: mvn -B compile --file pom.xml
