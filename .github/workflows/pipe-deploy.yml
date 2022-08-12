@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurim'
         cache: maven
     - name: Compilacao
-      run: mvn -B compila --file pom.xml
+      run: mvn -B compile --file pom.xml
       
       
   
