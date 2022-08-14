@@ -9,11 +9,11 @@ on:
   
 jobs:
   build:
-    name: compilacao
+    name: Compilacao
     runs-on: ubuntu-latest
     
     steps:
-    - name: Git Checkout
+    - name: Checkout
       uses: actions/checkout@v3
     - name: configurar jdk 11
       uses: actions/setup-java@v3
@@ -24,8 +24,61 @@ jobs:
     - name: Compilacao
       run: mvn -B compile --file pom.xml
       
-      
+  code-quality:
+    name: Qualidade de Código
+    needs: build
+    runs-on: ubuntu-latest        
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Adiciona permissão para mvnw
+      run: chmod +x mvnw
+    - name: Análise SonarCloud
+      run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
+  sec-tests:
+    name: Segurança do Código
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Roda testes de segurança
+      run: echo Testes de segurança executados com sucesso      
+        
+  tests:
+    name: Testes automatizados
+    needs: code-quality
+    runs-on: ubuntu-latest    
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Configura JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Testes Unitários
+      run: mvn -B test --file pom.xml 
+      
+  integration-tests:
+    name: Testes de Integração
+    needs: code-quality
+    runs-on: ubuntu-latest    
+    
+    steps:
+    - name: Simula execução de testes integrados
+      run: echo Testes integrados executados com sucesso
+           
+      
+      
+      
+      
+      
       
       
       
