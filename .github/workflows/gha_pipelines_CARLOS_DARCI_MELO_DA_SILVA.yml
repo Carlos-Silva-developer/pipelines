@@ -9,7 +9,7 @@ on:
   
 jobs:
   build:
-    name: Compilacao
+    name: Compilando
     runs-on: ubuntu-latest
     
     steps:
@@ -38,15 +38,6 @@ jobs:
       run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  
-  sec-tests:
-    name: Segurança do Código
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Roda testes de segurança
-      run: echo Testes de segurança executados com sucesso      
         
   tests:
     name: Testes automatizados
@@ -64,16 +55,7 @@ jobs:
         cache: maven
     - name: Testes Unitários
       run: mvn -B test --file pom.xml 
-      
-  integration-tests:
-    name: Testes de Integração
-    needs: code-quality
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes integrados
-      run: echo Testes integrados executados com sucesso
-           
+               
       
       
       
